@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+#  Ensures git commit message:
+#  	1. starts with a capital letter
+#	2. is less than 50 characters 
+#       3. use imperative mood word (in preaproved list) 
+#       ~~4. make sure it doesnt end with punctiation (period or comma )
+#
+#
+commit_msg=$1
+first_word=${commit_msg%% *}
+imperative_mood_approved_list=['refactor','update','remove','release','merge','simplify']
+declare -i EXIT_CODE=0
+
+if [[ "$1" =~ ^[A-Z*] ]]
+then
+  echo -e "\e[32m[PASS]\e[0m Commit message starts with a capital letter"
+else
+  echo -e "\e[31m[FAIL]\e[0m Commit message starts with a capital letter \e[31m(starts with lower case '${1:0:1}')\e[0m"
+  EXIT_CODE=$((EXIT_CODE+1))
+fi
+
+if [[ ${#1} -le 50 ]] 
+then 
+  echo -e "\e[32m[PASS]\e[0m Commit message is less than or equal to 50 characters"
+else 
+  echo -e "\e[31m[FAIL]\e[0m Commit message is less than or equal to 50 character \e[31m(${#1} characters)\e[0m"
+  EXIT_CODE=$((EXIT_CODE+1))
+fi
+
+shopt -s nocasematch
+if [[ " ${imperative_mood_approved_list[*]} " == *"$first_word"* ]]
+then
+ echo -e "\e[32m[PASS]\e[0m Commit message starts with approved imperative word"
+else
+ echo -e "\e[31m[FAIL]\e[0m Commit message starts with approved imperative word \e[31m(invalid word: $first_word)\e[0m"
+ EXIT_CODE=$((EXIT_CODE+1))
+ echo -e "List of Approved Imperative Words:"
+ echo -e "\e[36m${imperative_mood_approved_list[*]}\e[0m"
+fi
+
+if [[ $EXIT_CODE -ne 0 ]]
+then
+ echo -e "\e[31m[TOTAL FAILURES: $EXIT_CODE]\e[0m"
+ echo -e "\e[31m Commit Unsuccessful: Run commit again as folling command to ignore and commit anyways:\n \t git commit --no-verify -m \"$1\"\e[0m"
+else
+ echo -e "\e[32m[NO FAILURES]: Commit was successful!!\e[0m"
+fi
+
+exit $EXIT_CODE
+
+
+
