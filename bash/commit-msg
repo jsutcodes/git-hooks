@@ -7,12 +7,13 @@
 #       ~~4. make sure it doesnt end with punctiation (period or comma )
 #
 #
-commit_msg=$1
+
+commit_msg=`head -n1 $1`
 first_word=${commit_msg%% *}
 imperative_mood_approved_list=['refactor','update','remove','release','merge','simplify','create','add']
 declare -i EXIT_CODE=0
 
-if [[ "$1" =~ ^[A-Z*] ]]
+if [[ "$commit_msg" =~ ^[A-Z*] ]]
 then
   echo -e "\e[32m[PASS]\e[0m Commit message starts with a capital letter"
 else
@@ -43,7 +44,7 @@ fi
 if [[ $EXIT_CODE -ne 0 ]]
 then
  echo -e "\e[31m[TOTAL FAILURES: $EXIT_CODE]\e[0m"
- echo -e "\e[31m Commit Unsuccessful: Run commit again as folling command to ignore and commit anyways:\n \t git commit --no-verify -m \"$1\"\e[0m"
+ echo -e "\e[31m Commit Unsuccessful: Run commit again as folling command to ignore and commit anyways:\n \t git commit --no-verify -m \"$commit_msg\"\e[0m"
 else
  echo -e "\e[32m[NO FAILURES]: Commit was successful!!\e[0m"
 fi
