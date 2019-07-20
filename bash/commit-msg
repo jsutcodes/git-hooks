@@ -37,6 +37,7 @@ else
  EXIT_CODE=$((EXIT_CODE+1))
  echo -e "List of Approved Imperative Words:"
  echo -e "\e[36m${imperative_mood_approved_list[*]}\e[0m"
+ echo -e "\e[36mMust satisy the following sentence:\n \tIf applied, this commit will _____\e[0m"
 fi
 
 if [[ $EXIT_CODE -ne 0 ]]
