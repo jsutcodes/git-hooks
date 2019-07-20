@@ -9,7 +9,7 @@
 #
 commit_msg=$1
 first_word=${commit_msg%% *}
-imperative_mood_approved_list=['refactor','update','remove','release','merge','simplify']
+imperative_mood_approved_list=['refactor','update','remove','release','merge','simplify','create']
 declare -i EXIT_CODE=0
 
 if [[ "$1" =~ ^[A-Z*] ]]
